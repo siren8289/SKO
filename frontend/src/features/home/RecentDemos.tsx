@@ -1,12 +1,14 @@
+ "use client";
+
 import React from 'react';
 import { motion } from 'motion/react';
 import { Button } from '../../ui/button';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { DemoCard } from '../demo/components/DemoCard';
 import { MOCK_DEMOS } from '../../lib/data';
 
 export function RecentDemos() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const recentDemos = MOCK_DEMOS.slice(0, 6);
 
   return (
@@ -17,7 +19,7 @@ export function RecentDemos() {
             <h2 className="mb-2">Recent Demos</h2>
             <p className="text-muted-foreground text-lg">See what the community is building today.</p>
           </div>
-          <Button variant="ghost" className="hidden sm:flex hover:text-primary" onClick={() => navigate('/explore')}>
+          <Button variant="ghost" className="hidden sm:flex hover:text-primary" onClick={() => router.push('/explore')}>
             View All Demos
           </Button>
         </div>

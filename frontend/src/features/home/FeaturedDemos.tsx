@@ -1,14 +1,16 @@
+ "use client";
+
 import React from 'react';
 import { motion } from 'motion/react';
 import { Card } from '../../ui/card';
 import { Button } from '../../ui/button';
 import { Badge } from '../../ui/badge';
 import { Heart, Eye, TrendingUp, ArrowRight } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { MOCK_DEMOS, CATEGORIES } from '../../lib/data';
 
 export function FeaturedDemos() {
-  const navigate = useNavigate();
+  const router = useRouter();
   
   // Get top 4 demos by likes
   const featuredDemos = [...MOCK_DEMOS]
@@ -28,10 +30,10 @@ export function FeaturedDemos() {
               Top-rated animations from our creative community
             </p>
           </div>
-          <Button 
+          <Button
             variant="ghost" 
             className="hidden sm:flex hover:text-primary"
-            onClick={() => navigate('/explore')}
+            onClick={() => router.push('/explore')}
           >
             View All
           </Button>
@@ -52,8 +54,8 @@ export function FeaturedDemos() {
                 viewport={{ once: true }}
               >
                 <Card 
-                  className="hover:border-primary/50 transition-all cursor-pointer group overflow-hidden h-full"
-                  onClick={() => navigate(`/demo/${demo.id}`)}
+                  className="hover;border-primary/50 transition-all cursor-pointer group overflow-hidden h-full"
+                  onClick={() => router.push(`/demos/${demo.id}`)}
                 >
                   {/* Single Column Content */}
                   <div className="p-8 flex flex-col h-full justify-between">

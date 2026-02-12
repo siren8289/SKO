@@ -1,5 +1,7 @@
+ "use client";
+
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useNavigation } from '../../lib/navigation';
 import { Button } from '../../ui/button';
 import { Input } from '../../ui/input';
@@ -9,7 +11,7 @@ import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '../../ui/alert';
 
 export function LoginForm() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { login } = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,7 +33,7 @@ export function LoginForm() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       login(); // Set user in context
-      navigate('/'); // Redirect to home
+      router.push('/'); // Redirect to home
     } catch (err: any) {
       setError(err.message || 'Failed to login');
     } finally {
@@ -82,7 +84,12 @@ export function LoginForm() {
             <Button className="w-full" type="submit" disabled={isLoading}>
               {isLoading ? 'Signing in...' : 'Sign In'}
             </Button>
-            <Button variant="link" className="w-full" onClick={() => navigate('/signup')} type="button">
+            <Button
+              variant="link"
+              className="w-full"
+              onClick={() => router.push('/signup')}
+              type="button"
+            >
               Don't have an account? Sign Up
             </Button>
           </CardFooter>

@@ -1,7 +1,9 @@
+ "use client";
+
 import React from 'react';
 import { motion } from 'motion/react';
 import { Button } from '../../ui/button';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Sparkles, Play } from 'lucide-react';
 
 /**
@@ -10,7 +12,7 @@ import { Sparkles, Play } from 'lucide-react';
  * @returns {JSX.Element} 전체 화면 히어로 섹션
  */
 export function Hero() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <section className="relative h-[calc(100vh-64px)] min-h-[800px] w-full overflow-hidden flex flex-col items-center justify-center bg-background">
@@ -98,7 +100,7 @@ export function Hero() {
             <Button
               size="lg"
               className="text-lg px-10 py-7 bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:opacity-90 transition-opacity gap-2 group shadow-lg shadow-primary/20"
-              onClick={() => navigate('/explore')}
+              onClick={() => router.push('/explore')}
             >
               <Sparkles className="h-6 w-6 group-hover:rotate-12 transition-transform" />
               Explore Interactions
@@ -109,7 +111,7 @@ export function Hero() {
               size="lg"
               variant="outline"
               className="text-lg px-10 py-7 border-primary/40 hover:bg-primary/10 hover:border-primary gap-2 group backdrop-blur-sm"
-              onClick={() => navigate('/create')}
+              onClick={() => router.push('/editor/new')}
             >
               <Play className="h-6 w-6 fill-current group-hover:scale-110 transition-transform" />
               Start Creating

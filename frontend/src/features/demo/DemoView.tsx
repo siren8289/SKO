@@ -1,5 +1,7 @@
+ "use client";
+
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { DEMOS, CATEGORIES } from '../../lib/data';
 import { Button } from '../../ui/button';
 import { Badge } from '../../ui/badge';
@@ -8,9 +10,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../ui/tabs';
 import { ArrowLeft, Code, Eye, Share2, Heart, Copy, Check, Info } from 'lucide-react';
 
-export function DemoView() {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+export function DemoView({ id }: { id: string }) {
+  const router = useRouter();
   const [copied, setCopied] = useState(false);
 
   const demo = DEMOS.find(d => d.id === id);
@@ -19,7 +20,7 @@ export function DemoView() {
     return (
       <div className="container px-4 py-24 text-center">
         <h1 className="text-2xl font-bold mb-4">Demo not found</h1>
-        <Button onClick={() => navigate('/explore')}>Back to Explore</Button>
+        <Button onClick={() => router.push('/explore')}>Back to Explore</Button>
       </div>
     );
   }
@@ -38,7 +39,11 @@ export function DemoView() {
       <div className="container px-4 mx-auto max-w-7xl">
         {/* Header Section */}
         <div className="mb-8">
-          <Button variant="ghost" className="mb-6 pl-0 hover:pl-2 transition-all" onClick={() => navigate('/explore')}>
+          <Button
+            variant="ghost"
+            className="mb-6 pl-0 hover:pl-2 transition-all"
+            onClick={() => router.push('/explore')}
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Explore
           </Button>
@@ -88,7 +93,7 @@ export function DemoView() {
               <Button variant={demo.isFavorite ? "default" : "outline"} size="icon" className={demo.isFavorite ? "bg-red-500 hover:bg-red-600 border-red-500" : ""}>
                 <Heart className={`h-4 w-4 ${demo.isFavorite ? "fill-white" : ""}`} />
               </Button>
-              <Button onClick={() => navigate(`/editor?demo=${demo.id}`)}>
+              <Button onClick={() => router.push(`/editor/${demo.id}`)}>
                 Open in Editor
               </Button>
             </div>
@@ -131,7 +136,7 @@ export function DemoView() {
                     <p className="text-muted-foreground mb-6">
                       This is a static placeholder. In the real app, the code would be executed here.
                     </p>
-                    <Button onClick={() => navigate(`/editor?demo=${demo.id}`)}>
+              <Button onClick={() => router.push(`/editor/${demo.id}`)}>
                       Run in Editor
                     </Button>
                  </div>

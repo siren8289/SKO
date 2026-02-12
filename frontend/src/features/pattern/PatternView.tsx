@@ -1,5 +1,7 @@
+ "use client";
+
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { PATTERNS, CATEGORIES } from '../../lib/data';
 import { Button } from '../../ui/button';
 import { Badge } from '../../ui/badge';
@@ -7,9 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../ui/tabs';
 import { ArrowLeft, Code, Eye, Share2, Heart, Copy, Check } from 'lucide-react';
 import { Card } from '../../ui/card';
 
-export function PatternView() {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+export function PatternView({ id }: { id: string }) {
+  const router = useRouter();
   const [copied, setCopied] = useState(false);
 
   const pattern = PATTERNS.find(p => p.id === id);
@@ -18,7 +19,7 @@ export function PatternView() {
     return (
       <div className="container px-4 py-24 text-center">
         <h1 className="text-2xl font-bold mb-4">Pattern not found</h1>
-        <Button onClick={() => navigate('/explore')}>Back to Explore</Button>
+        <Button onClick={() => router.push('/explore')}>Back to Explore</Button>
       </div>
     );
   }
@@ -36,7 +37,11 @@ export function PatternView() {
       <div className="container px-4 mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <Button variant="ghost" className="mb-6 pl-0 hover:pl-2 transition-all" onClick={() => navigate(-1)}>
+          <Button
+            variant="ghost"
+            className="mb-6 pl-0 hover:pl-2 transition-all"
+            onClick={() => router.back()}
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back
           </Button>
@@ -68,7 +73,7 @@ export function PatternView() {
               <Button variant="outline" size="icon">
                 <Heart className="h-4 w-4" />
               </Button>
-              <Button onClick={() => navigate(`/editor?pattern=${pattern.id}`)}>
+              <Button onClick={() => router.push(`/editor/${pattern.id}`)}>
                 Open in Editor
               </Button>
             </div>

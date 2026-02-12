@@ -1,6 +1,8 @@
+ "use client";
+
 import React from 'react';
+import Link from 'next/link';
 import { Github, Twitter, MessageCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 export function Footer() {
   return (

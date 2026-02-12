@@ -1,5 +1,8 @@
+ "use client";
+
 import React from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { Compass, Plus, Search, User, LogOut, Heart, Settings, Layers } from 'lucide-react';
 import { Button } from '../../ui/button';
 import {
@@ -26,8 +29,8 @@ import { CATEGORIES } from '../../lib/data';
  * @returns {JSX.Element} 전역 헤더
  */
 export function Header() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   
   /**
    * Mock Auth State
@@ -44,7 +47,7 @@ export function Header() {
         {/* LEFT SECTION: Logo & Navigation */}
         <div className="flex items-center gap-8">
           {/* SKO 로고 */}
-          <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
+          <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
             {/* Logo Symbol */}
             <div className="relative w-7 h-7 flex items-center justify-center">
               <div className="absolute inset-0 bg-gradient-to-br from-primary to-secondary rounded blur-sm opacity-60" />
@@ -60,10 +63,10 @@ export function Header() {
           
           {/* 메인 네비게이션 링크 */}
           <div className="hidden md:flex items-center gap-1">
-            <Button 
+            <Button
               variant="ghost" 
-              className={`text-sm transition-all ${location.pathname === '/explore' ? 'text-white bg-gradient-to-r from-[#9BD5FF] to-[#CBA7FF]' : 'text-muted-foreground hover:text-white hover:bg-gradient-to-r hover:from-[#9BD5FF] hover:to-[#CBA7FF]'}`}
-              onClick={() => navigate('/explore')}
+              className={`text-sm transition-all ${pathname === '/explore' ? 'text-white bg-gradient-to-r from-[#9BD5FF] to-[#CBA7FF]' : 'text-muted-foreground hover:text-white hover:bg-gradient-to-r hover:from-[#9BD5FF] hover:to-[#CBA7FF]'}`}
+              onClick={() => router.push('/explore')}
             >
               <Compass className="mr-2 h-4 w-4" />
               Explore
@@ -83,7 +86,7 @@ export function Header() {
                           <li key={category.id}>
                             <NavigationMenuLink asChild>
                               <a
-                                onClick={() => navigate(`/category/${category.id}`)}
+                                onClick={() => router.push(`/category/${category.id}`)}
                                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-all hover:bg-gradient-to-r hover:from-[#9BD5FF]/20 hover:to-[#CBA7FF]/20 cursor-pointer group"
                               >
                                 <div className="flex items-center gap-3 mb-2">
@@ -115,10 +118,10 @@ export function Header() {
             </NavigationMenu>
             
             {isLoggedIn && (
-              <Button 
+              <Button
                 variant="ghost" 
-                className={`text-sm transition-all ${location.pathname === '/create' ? 'text-white bg-gradient-to-r from-[#FF8ECF] to-[#CBA7FF]' : 'text-muted-foreground hover:text-white hover:bg-gradient-to-r hover:from-[#FF8ECF] hover:to-[#CBA7FF]'}`}
-                onClick={() => navigate('/create')}
+                className={`text-sm transition-all ${pathname === '/create' ? 'text-white bg-gradient-to-r from-[#FF8ECF] to-[#CBA7FF]' : 'text-muted-foreground hover:text-white hover:bg-gradient-to-r hover:from-[#FF8ECF] hover:to-[#CBA7FF]'}`}
+                onClick={() => router.push('/editor/new')}
               >
                 <Plus className="mr-2 h-4 w-4" />
                 Create Demo
@@ -130,11 +133,11 @@ export function Header() {
         {/* RIGHT SECTION: Search & Profile */}
         <div className="flex items-center gap-2">
           {/* 검색 버튼 */}
-          <Button 
+          <Button
             variant="ghost" 
             size="icon" 
             className="text-muted-foreground hover:text-white hover:bg-gradient-to-r hover:from-[#9BD5FF] hover:to-[#CBA7FF] transition-all" 
-            onClick={() => navigate('/explore')} 
+            onClick={() => router.push('/explore')} 
             title="Search demos"
           >
             <Search className="h-5 w-5" />
@@ -163,24 +166,24 @@ export function Header() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 
-                <DropdownMenuItem 
-                  onClick={() => navigate('/my-demos')}
+                <DropdownMenuItem
+                  onClick={() => router.push('/my-demos')}
                   className="cursor-pointer hover:bg-gradient-to-r hover:from-[#9BD5FF]/20 hover:to-[#CBA7FF]/20 focus:bg-gradient-to-r focus:from-[#9BD5FF]/20 focus:to-[#CBA7FF]/20 data-[highlighted]:bg-gradient-to-r data-[highlighted]:from-[#9BD5FF]/20 data-[highlighted]:to-[#CBA7FF]/20 transition-all"
                 >
                   <Layers className="mr-2 h-4 w-4" />
                   <span>My Demos</span>
                 </DropdownMenuItem>
                 
-                <DropdownMenuItem 
-                  onClick={() => navigate('/favorites')}
+                <DropdownMenuItem
+                  onClick={() => router.push('/favorites')}
                   className="cursor-pointer hover:bg-gradient-to-r hover:from-[#9BD5FF]/20 hover:to-[#CBA7FF]/20 focus:bg-gradient-to-r focus:from-[#9BD5FF]/20 focus:to-[#CBA7FF]/20 data-[highlighted]:bg-gradient-to-r data-[highlighted]:from-[#9BD5FF]/20 data-[highlighted]:to-[#CBA7FF]/20 transition-all"
                 >
                   <Heart className="mr-2 h-4 w-4" />
                   <span>My Favorites</span>
                 </DropdownMenuItem>
                 
-                <DropdownMenuItem 
-                  onClick={() => navigate('/profile')}
+                <DropdownMenuItem
+                  onClick={() => router.push('/profile')}
                   className="cursor-pointer hover:bg-gradient-to-r hover:from-[#9BD5FF]/20 hover:to-[#CBA7FF]/20 focus:bg-gradient-to-r focus:from-[#9BD5FF]/20 focus:to-[#CBA7FF]/20 data-[highlighted]:bg-gradient-to-r data-[highlighted]:from-[#9BD5FF]/20 data-[highlighted]:to-[#CBA7FF]/20 transition-all"
                 >
                   <Settings className="mr-2 h-4 w-4" />
@@ -189,8 +192,8 @@ export function Header() {
                 
                 <DropdownMenuSeparator />
                 
-                <DropdownMenuItem 
-                  onClick={() => navigate('/login')}
+                <DropdownMenuItem
+                  onClick={() => router.push('/login')}
                   className="cursor-pointer text-red-400 focus:text-red-400 focus:bg-red-400/10"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
@@ -200,13 +203,13 @@ export function Header() {
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2 ml-2">
-              <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>
+              <Button variant="ghost" size="sm" onClick={() => router.push('/login')}>
                 Log in
               </Button>
-              <Button 
+              <Button
                 size="sm" 
                 className="bg-[#A783FF] hover:bg-[#9061ff] text-white"
-                onClick={() => navigate('/signup')}
+                onClick={() => router.push('/signup')}
               >
                 Sign Up
               </Button>

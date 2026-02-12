@@ -1,6 +1,8 @@
+ "use client";
+
 import React from 'react';
 import { motion } from 'motion/react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Search, Filter, Grid, List } from 'lucide-react';
 import { Button } from '../../ui/button';
 import { Input } from '../../ui/input';
@@ -15,7 +17,7 @@ import { DemoCard } from '../demo/components/DemoCard';
 import { DEMOS, CATEGORIES } from '../../lib/data';
 
 export function ExploreView() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [viewMode, setViewMode] = React.useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = React.useState('');
   const [selectedCategory, setSelectedCategory] = React.useState<string>('all');
@@ -67,7 +69,7 @@ export function ExploreView() {
                 </Select>
 
                 <div className="flex items-center border rounded-md bg-card">
-                   <Button 
+                   <Button
                       variant={viewMode === 'grid' ? 'secondary' : 'ghost'} 
                       size="icon"
                       onClick={() => setViewMode('grid')}
@@ -75,7 +77,7 @@ export function ExploreView() {
                    >
                       <Grid className="h-4 w-4" />
                    </Button>
-                   <Button 
+                   <Button
                       variant={viewMode === 'list' ? 'secondary' : 'ghost'} 
                       size="icon"
                       onClick={() => setViewMode('list')}

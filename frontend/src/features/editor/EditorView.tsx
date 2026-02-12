@@ -1,5 +1,7 @@
+ "use client";
+
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '../../ui/resizable';
 import { ScrollArea } from '../../ui/scroll-area';
 import { Button } from '../../ui/button';
@@ -9,11 +11,13 @@ import { Input } from '../../ui/input';
 import { ArrowLeft, Play, Save, Settings, Download, Share2, Smartphone, Monitor, Tablet, RefreshCw, LayoutTemplate } from 'lucide-react';
 import { PATTERNS, DEMOS } from '../../lib/data';
 
-export function EditorView() {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const patternId = searchParams.get('pattern');
-  const demoId = searchParams.get('demo');
+interface EditorViewProps {
+  patternId?: string;
+  demoId?: string;
+}
+
+export function EditorView({ patternId, demoId }: EditorViewProps) {
+  const router = useRouter();
   
   const [code, setCode] = useState('');
   const [title, setTitle] = useState('Untitled Project');
@@ -26,22 +30,26 @@ export function EditorView() {
       if (pattern) {
         setCode(pattern.code.jsx || '// No code available');
         setTitle(`Remix of ${pattern.name}`);
+        return;
       }
-    } else if (demoId) {
+    }
+
+    if (demoId) {
       const demo = DEMOS.find(d => d.id === demoId);
       if (demo) {
         setCode(demo.code.jsx || '// No code available');
         setTitle(`Remix of ${demo.title}`);
+        return;
       }
-    } else {
-      setCode(`export default function App() {
+    }
+
+    setCode(`export default function App() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
       <h1 className="text-4xl font-bold">Hello World</h1>
     </div>
   );
 }`);
-    }
   }, [patternId, demoId]);
 
   const handleRefresh = () => {
@@ -53,7 +61,7 @@ export function EditorView() {
       {/* Top Bar */}
       <div className="h-14 border-b flex items-center justify-between px-4 bg-card z-10">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+          <Button variant="ghost" size="icon" onClick={() => router.back()}>
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div className="flex items-center gap-2">

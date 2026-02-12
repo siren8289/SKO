@@ -1,5 +1,7 @@
+ "use client";
+
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Card } from '../../../ui/card';
 import { Badge } from '../../../ui/badge';
 import { Heart, Eye } from 'lucide-react';
@@ -17,7 +19,7 @@ interface DemoCardProps {
  * @returns {JSX.Element} 데모 카드
  */
 export function DemoCard({ demo, layout = 'grid' }: DemoCardProps) {
-  const navigate = useNavigate();
+  const router = useRouter();
   
   // 카테고리 정보 & 아이콘 가져오기
   const category = CATEGORIES.find(c => c.id === demo.category);
@@ -25,9 +27,9 @@ export function DemoCard({ demo, layout = 'grid' }: DemoCardProps) {
 
   if (layout === 'list') {
     return (
-      <Card 
+      <Card
         className="hover:border-primary/50 transition-all cursor-pointer group overflow-hidden flex flex-row items-center p-4 gap-6"
-        onClick={() => navigate(`/demo/${demo.id}`)}
+        onClick={() => router.push(`/demos/${demo.id}`)}
       >
         {/* Left: Thumbnail/Icon placeholder if we had one, or just Category Icon large */}
         <div 
@@ -78,9 +80,9 @@ export function DemoCard({ demo, layout = 'grid' }: DemoCardProps) {
   }
 
   return (
-    <Card 
+    <Card
       className="hover:border-primary/50 transition-all cursor-pointer group overflow-hidden"
-      onClick={() => navigate(`/demo/${demo.id}`)}
+      onClick={() => router.push(`/demos/${demo.id}`)}
     >
       <div className="p-8 space-y-8">
         {/* TOP: 카테고리 아이콘 & 배지 & 제목 */}

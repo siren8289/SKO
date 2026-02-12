@@ -1,7 +1,9 @@
+ "use client";
+
 import React from 'react';
 import { motion } from 'motion/react';
 import { Layers, Plus } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Button } from '../ui/button';
 import { Header } from '../shared/layout/Header';
 import { Footer } from '../shared/layout/Footer';
@@ -16,7 +18,7 @@ import { MOCK_DEMOS, MOCK_USER } from '../lib/data';
 import { DemoCard } from '../features/demo/components/DemoCard';
 
 export default function MyDemosPage() {
-  const navigate = useNavigate();
+  const router = useRouter();
   // Filter demos for mock user
   // In real app, fetch from API
   const myDemos = MOCK_DEMOS.slice(0, 3); // Just simulating some owned demos
@@ -37,7 +39,7 @@ export default function MyDemosPage() {
                 Manage your created interactions and projects.
               </p>
             </div>
-            <Button onClick={() => navigate('/create')} className="bg-gradient-to-r from-primary to-secondary">
+            <Button onClick={() => router.push('/editor/new')} className="bg-gradient-to-r from-primary to-secondary">
               <Plus className="h-4 w-4 mr-2" />
               Create New Demo
             </Button>
@@ -62,7 +64,7 @@ export default function MyDemosPage() {
               <Layers className="h-12 w-12 mx-auto text-muted-foreground mb-4 opacity-50" />
               <h3 className="text-xl font-semibold mb-2">No demos yet</h3>
               <p className="text-muted-foreground mb-6">Start building your first interaction today!</p>
-              <Button onClick={() => navigate('/create')}>Create Demo</Button>
+              <Button onClick={() => router.push('/editor/new')}>Create Demo</Button>
             </div>
           )}
         </div>

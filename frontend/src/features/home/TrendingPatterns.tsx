@@ -1,14 +1,16 @@
+ "use client";
+
 import React from 'react';
 import { motion } from 'motion/react';
 import { Card } from '../../ui/card';
 import { Badge } from '../../ui/badge';
 import { Button } from '../../ui/button';
 import { ArrowRight, Flame } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { CATEGORIES, PATTERNS } from '../../lib/data';
 
 export function TrendingPatterns() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   // Sort patterns by likes (simulating popularity)
   const trendingPatterns = [...PATTERNS]
@@ -28,10 +30,10 @@ export function TrendingPatterns() {
               Most popular patterns this week
             </p>
           </div>
-          <Button 
+          <Button
             variant="ghost" 
             className="hidden sm:flex hover:text-primary"
-            onClick={() => navigate('/explore')}
+            onClick={() => router.push('/explore')}
           >
             View All
           </Button>
@@ -66,7 +68,7 @@ export function TrendingPatterns() {
               >
                 <Card 
                   className="hover:border-primary/50 transition-all cursor-pointer group overflow-hidden"
-                  onClick={() => navigate(`/pattern/${pattern.id}`)}
+                  onClick={() => router.push(`/patterns/${pattern.id}`)}
                 >
                   {/* Horizontal Compact Layout */}
                   <div className="flex items-center gap-6 p-5">

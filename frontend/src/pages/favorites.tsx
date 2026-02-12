@@ -1,7 +1,9 @@
+ "use client";
+
 import React from 'react';
 import { motion } from 'motion/react';
 import { Heart } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Button } from '../ui/button';
 import { Header } from '../shared/layout/Header';
 import { Footer } from '../shared/layout/Footer';
@@ -9,7 +11,7 @@ import { MOCK_DEMOS } from '../lib/data';
 import { DemoCard } from '../features/demo/components/DemoCard';
 
 export default function FavoritesPage() {
-  const navigate = useNavigate();
+  const router = useRouter();
   // Filter favorite demos
   const favorites = MOCK_DEMOS.filter(d => d.isFavorite);
 
@@ -48,7 +50,7 @@ export default function FavoritesPage() {
               <Heart className="h-12 w-12 mx-auto text-muted-foreground mb-4 opacity-50" />
               <h3 className="text-xl font-semibold mb-2">No favorites yet</h3>
               <p className="text-muted-foreground mb-6">Explore the community to find patterns you love.</p>
-              <Button onClick={() => navigate('/explore')}>Explore Demos</Button>
+              <Button onClick={() => router.push('/explore')}>Explore Demos</Button>
             </div>
           )}
         </div>

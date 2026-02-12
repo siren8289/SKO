@@ -1,5 +1,6 @@
+ "use client";
+
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Header } from '../shared/layout/Header';
 import { Footer } from '../shared/layout/Footer';
 import { MOCK_USER } from '../lib/data';
@@ -11,7 +12,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 
 export default function ProfilePage() {
-  const navigate = useNavigate();
   const user = MOCK_USER;
 
   return (

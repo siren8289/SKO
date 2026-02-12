@@ -1,6 +1,8 @@
+ "use client";
+
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
+import { useRouter } from 'next/navigation';
 import { CATEGORIES, PATTERNS, DEMOS } from '../../lib/data';
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
 import { Badge } from '../../ui/badge';
@@ -9,9 +11,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../ui/tabs';
 import { ArrowLeft, BookOpen, Layers, LayoutGrid } from 'lucide-react';
 import { DemoCard } from '../demo/components/DemoCard';
 
-export function CategoryView() {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+export function CategoryView({ id }: { id: string }) {
+  const router = useRouter();
 
   const category = CATEGORIES.find(c => c.id === id);
   const patterns = PATTERNS.filter(p => p.categoryId === id);
@@ -21,7 +22,7 @@ export function CategoryView() {
     return (
       <div className="container px-4 py-24 text-center">
         <h1 className="text-2xl font-bold mb-4">Category not found</h1>
-        <Button onClick={() => navigate('/explore')}>Back to Explore</Button>
+        <Button onClick={() => router.push('/explore')}>Back to Explore</Button>
       </div>
     );
   }
@@ -33,7 +34,11 @@ export function CategoryView() {
       <div className="container px-4 mx-auto">
         {/* Header */}
         <div className="mb-12">
-          <Button variant="ghost" className="mb-6 pl-0 hover:pl-2 transition-all" onClick={() => navigate(-1)}>
+          <Button
+            variant="ghost"
+            className="mb-6 pl-0 hover:pl-2 transition-all"
+            onClick={() => router.back()}
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back
           </Button>
@@ -72,9 +77,9 @@ export function CategoryView() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
                 >
-                  <Card 
+                  <Card
                     className="hover:border-primary/50 transition-all cursor-pointer h-full"
-                    onClick={() => navigate(`/pattern/${pattern.id}`)}
+                    onClick={() => router.push(`/patterns/${pattern.id}`)}
                   >
                     <CardHeader>
                       <div className="flex justify-between items-start mb-2">

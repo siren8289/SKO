@@ -1,12 +1,14 @@
+ "use client";
+
 import React from 'react';
 import { motion } from 'motion/react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { CATEGORIES } from '../../lib/data';
 import { Button } from '../../ui/button';
 
 export function Categories() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <section className="min-h-[600px] w-full py-20 bg-secondary/5 flex flex-col justify-center">
@@ -32,7 +34,7 @@ export function Categories() {
                   style={{
                     '--category-color': category.color
                   } as React.CSSProperties}
-                  onClick={() => navigate(`/category/${category.id}`)}
+                  onClick={() => router.push(`/category/${category.id}`)}
                 >
                   {/* Glow effect on hover */}
                   <div 
@@ -64,7 +66,7 @@ export function Categories() {
                       style={{
                         borderColor: `${category.color}40`,
                       }}
-                      onClick={() => navigate(`/category/${category.id}`)}
+                      onClick={() => router.push(`/category/${category.id}`)}
                     >
                       View Patterns
                       <span className="ml-2 group-hover/btn:translate-x-1 transition-transform">→</span>

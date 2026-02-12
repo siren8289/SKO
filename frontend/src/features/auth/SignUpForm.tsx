@@ -1,5 +1,7 @@
+ "use client";
+
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useNavigation } from '../../lib/navigation';
 import { Button } from '../../ui/button';
 import { Input } from '../../ui/input';
@@ -9,7 +11,7 @@ import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '../../ui/alert';
 
 export function SignUpForm() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { login } = useNavigation(); // We'll just auto-login on signup for mock
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -31,7 +33,7 @@ export function SignUpForm() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       login(); // Set user in context
-      navigate('/'); // Redirect to home
+      router.push('/'); // Redirect to home
     } catch (err: any) {
       setError(err.message || 'Failed to sign up');
     } finally {
@@ -92,7 +94,12 @@ export function SignUpForm() {
             <Button className="w-full" type="submit" disabled={isLoading}>
               {isLoading ? 'Creating account...' : 'Create account'}
             </Button>
-            <Button variant="link" className="w-full" onClick={() => navigate('/login')} type="button">
+            <Button
+              variant="link"
+              className="w-full"
+              onClick={() => router.push('/login')}
+              type="button"
+            >
               Already have an account? Sign In
             </Button>
           </CardFooter>
