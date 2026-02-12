@@ -1,116 +1,114 @@
 
 
-## 프로젝트 소개
+## 프로젝트 개요
 
-모션/인터랙션 데모를 **만들고 저장하고 관리**할 수 있는 풀스택 웹 앱입니다.
-사용자 관점에서는 “내 데모를 깔끔하게 CRUD로 관리”하는 흐름이 핵심이고, 개발자 관점에서는 인증 → 권한 → 데이터 모델 → API 연동 → 통계 집계까지 한 번에 경험할 수 있게 MVP를 구성했습니다.
+* 모션/인터랙션 데모 **생성·저장·관리** 풀스택 웹 앱 구현 구성.
+* 데모 제작 과정에서 결과 확인·정리·관리·공유 흐름 단절 문제 개선 목표 구성.
+* MVP는 **인증 + 내 데모 대시보드(CRUD)** 중심 구성.
 
 ---
 
 ## 기술 스택
 
-* **Frontend**: Next.js 14 (App Router), React, TypeScript, Tailwind CSS, shadcn/ui, Framer Motion
-* **Backend**: Spring Boot 3, Java 17, JPA/Hibernate
-* **Database**: PostgreSQL
-* **Build/Tooling**: Gradle(Backend), npm(Frontend)
-
-### 왜 이 조합?
-
-* **Next.js 14(App Router)**: 라우팅/서버 컴포넌트 기반으로 화면 구성 단순화 + 대시보드 같은 UI 개발 속도 좋음
-* **Spring Boot 3 + JPA**: 인증/권한/도메인 모델 중심의 API를 안정적으로 설계하기 좋고, 유지보수/확장에 유리
-* **PostgreSQL**: 유저/데모/즐겨찾기처럼 관계가 명확한 데이터에 적합 + 집계(views/likes) 처리도 안정적
+* **프론트**: Next.js 14(App Router), React, TypeScript, Tailwind CSS, Shadcn UI, Framer Motion 구성.
+* **백엔드**: Spring Boot 3, Java 17, JPA/Hibernate 구성.
+* **DB**: PostgreSQL 구성.
+* **빌드**: 백엔드 Gradle, 프론트 npm 빌드 구성.
 
 ---
 
-## 아키텍처 요약
+## 기술 선정 이유
 
-* **Frontend(Next.js)**: 로그인/회원가입, 내 데모 대시보드 UI, API 호출 및 상태 관리
-* **Backend(Spring Boot)**: 인증(JWT), 데모 CRUD, 즐겨찾기, 통계 집계 API 제공
-* **DB(PostgreSQL)**: Users / Demos / Favorites 중심의 관계 모델링, 유니크 제약으로 데이터 정합성 확보
+### Next.js 14 (App Router) / React / TypeScript
+
+* App Router 기반 라우팅·레이아웃 구조 정리 구성(대시보드 중심 UI 일관성 확보).
+* React 컴포넌트 기반 UI 재사용 설계 구성(폼/테이블/모달 중심).
+* TypeScript 기반 API 요청/응답 타입 고정 구성(필드 누락/타입 오류 감소 목적).
+
+### Tailwind CSS / Shadcn UI
+
+* Tailwind CSS 기반 빠른 스타일 적용 구성(토큰 기반 일관성 관리 목적).
+* shadcn/ui 기반 공통 UI 표준화 구성(버튼/폼/다이얼로그/테이블 중심, 개발 속도·유지보수성 확보).
+
+### Framer Motion
+
+* 모션/인터랙션 중심 서비스 특성 반영 구성(컴포넌트 단위 애니메이션 적용).
+* UI 전환, 리스트 인터랙션, 미세 피드백 애니메이션 구현 구성.
+
+### Spring Boot 3 / Java 17 / JPA(Hibernate)
+
+* 인증/인가 포함 REST API 서버 표준 구조 구성 목적.
+* Java 17 기반 런타임 안정성 확보 구성.
+* Users–Demos–Favorites 관계 중심 도메인 모델링 구성 + JPA 트랜잭션/연관관계 관리 구성.
+
+### PostgreSQL
+
+* 사용자/데모/즐겨찾기 관계형 모델 적합 구성.
+* 유니크 제약 + FK 기반 데이터 정합성 DB 레벨 강제 구성.
+* 조회수/좋아요/즐겨찾기 집계 요구 대응 구성.
 
 ---
 
-## 핵심 기능 (MVP)
+## 필수 기능 2가지 (MVP)
 
-### 1) 인증 (로그인/회원가입)
+### 1) 인증(로그인/회원가입)
 
-이메일/비밀번호 기반으로 가입/로그인을 제공하고, 이후 기능은 **로그인 유저 기준으로만 동작**하게 구성했습니다.
+* 이메일/비밀번호 기반 회원가입·로그인 제공 구성.
+* 백엔드 인증 API 연동 구성.
 
-* **Endpoints**
-
-  * `POST /api/auth/signup`
-  * `POST /api/auth/login`
-* **처리 포인트**
-
-  * 비밀번호는 해시 저장(보안 기본기)
-  * 로그인 성공 시 토큰 발급(JWT 전제) → 프론트에서 보호 라우팅/대시보드 접근 제어
+  * `POST /api/auth/signup` 회원가입 처리 연동.
+  * `POST /api/auth/login` 로그인 처리 연동.
+* 가입 시 사용자 정보 DB 저장 구성.
+* 비밀번호 해시 저장 적용 구성.
+* 로그인 성공 이후 기능 전부 **로그인 사용자 기준 동작** 구성.
 
 ---
 
-### 2) 사용자 대시보드 (CRUD)
+### 2) 사용자 대시보드(CRUD)
 
-“내 데모”를 **목록/상세/생성/수정/삭제**까지 한 흐름으로 제공합니다.
-여기는 **전부 백엔드 API + DB 연동**으로 처리했고, 즐겨찾기랑 통계까지 같이 붙였습니다.
+* 로그인 사용자 기준 **“내 데모”** 목록/상세/생성/수정/삭제 제공 구성.
+* 즐겨찾기 + 통계 포함 관리 화면 완성도 확보 구성.
+* 기능 전체 백엔드 API 및 DB 연동 처리 구성.
 
-#### 기능 범위
+#### 제공 기능
 
-* **내 데모 목록**: 로그인 유저 소유 데모 리스트
-* **내 데모 상세**: 단건 상세(데모 정보/코드/메타)
-* **데모 생성/수정/삭제**: 소유권 검증 포함
-* **즐겨찾기(Favorites)**: 추가/삭제, 즐겨찾기 목록 조회
-* **통계(집계)**: 내 데모 기준
+* 내 데모 목록 조회 구성.
+* 내 데모 상세 조회 구성.
+* 내 데모 생성 구성.
+* 내 데모 수정 구성.
+* 내 데모 삭제 구성.
+* 데모 즐겨찾기 추가/제거 구성.
+* 통계 집계 및 표시 구성(데모 수/조회수 합계/좋아요·즐겨찾기 관련 집계).
 
-  * 총 데모 수
-  * 조회수 합계
-  * 좋아요/즐겨찾기 관련 집계
-
-#### Endpoints
+#### 연동 API
 
 * **Demos**
 
-  * `GET /api/demos`
-  * `GET /api/demos/{id}`
-  * `POST /api/demos`
-  * `PUT /api/demos/{id}`
-  * `DELETE /api/demos/{id}`
+  * `GET /api/demos` 목록 조회 연동.
+  * `GET /api/demos/{id}` 상세 조회 연동.
+  * `POST /api/demos` 생성 연동.
+  * `PUT /api/demos/{id}` 수정 연동.
+  * `DELETE /api/demos/{id}` 삭제 연동.
 * **Favorites**
 
-  * `POST /api/favorites/{demoId}`
-  * `DELETE /api/favorites/{demoId}`
-  * `GET /api/favorites`
+  * `POST /api/favorites/{demoId}` 즐겨찾기 추가 연동.
+  * `DELETE /api/favorites/{demoId}` 즐겨찾기 제거 연동.
+  * `GET /api/favorites` 즐겨찾기 목록 조회 연동.
 
 ---
 
-## 데이터 모델 (요약)
+## DB 모델 요약
 
-* **Users**
-
-  * email(유니크), password(해시), nickname, profile, timestamps
-* **Demos**
-
-  * user_id(FK), title, description, code(html/css/js), is_public, views, likes, timestamps
-* **Favorites**
-
-  * user_id(FK), demo_id(FK)
-  * `(user_id, demo_id)` 유니크로 중복 즐겨찾기 방지
-
-> 여기서 중요한 건 “권한/정합성”이라서, 데모 수정/삭제는 **항상 소유자 검증**, 즐겨찾기는 **유니크 제약**으로 막는 식으로 갔습니다.
+* **Users**: email 유니크 관리 구성, password 해시 저장 구성.
+* **Demos**: `user_id(FK)` 기반 소유자 고정 구성, `views/likes` 기반 통계 집계 구성.
+* **Favorites**: `(user_id, demo_id)` 유니크 제약 적용 구성(중복 즐겨찾기 방지).
 
 ---
 
-## 내가 한 일 (풀스택 기준으로 보여주기)
+## 구현 포인트
 
-* **Frontend**
+* 데모 수정/삭제 소유자 권한 검증 전제 구성.
+* 즐겨찾기 중복 DB 유니크 제약 기반 원천 차단 구성.
+* 대시보드 통계 “내 데모 기준” 집계 구성(한 화면 확인 목적).
 
-  * Next.js(App Router)로 인증/대시보드 라우팅 구성
-  * Tailwind + shadcn/ui로 UI 컴포넌트 설계
-  * API 연동 기반 CRUD 플로우 구현(목록/상세/폼/삭제)
-* **Backend**
-
-  * Spring Boot로 인증/도메인 API 설계 및 구현
-  * JPA 엔티티/연관관계 설계 + 트랜잭션 처리
-  * 즐겨찾기/통계 집계 API 구현
-* **Database**
-
-  * PostgreSQL 스키마/제약조건(유니크, FK) 설계로 데이터 정합성 확보
 
